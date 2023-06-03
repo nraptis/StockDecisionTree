@@ -7,6 +7,7 @@
 
 import Foundation
 
+typealias LabeledNode = StockDataLabeled.StockDataLabeledNode
 struct StockDataLabeled {
     
     struct StockDataLabeledNode: CustomStringConvertible {
@@ -14,6 +15,8 @@ struct StockDataLabeled {
         let year: Int
         let month: Int
         let day: Int
+        
+        let change: Float
         
         let change1: Float
         let change2: Float
@@ -28,13 +31,16 @@ struct StockDataLabeled {
         let daysSincePreviousClose: Int
         
         var description: String {
+            
+            let changeString = String(format: "%.2f", change)
+            
             let change1String = String(format: "%.2f", change1)
             let change2String = String(format: "%.2f", change2)
             let change3String = String(format: "%.2f", change3)
             let change4String = String(format: "%.2f", change4)
             let change5String = String(format: "%.2f", change5)
             
-            return "y:\(year) m:\(month) d:\(day) (c1: \(change1String) c2: \(change2String) c3: \(change3String) c4: \(change4String) c5: \(change5String)) (su: \(streakUp)) (sd: \(streakDown)) (pcu: \(previousCloseWasUp)) (dpc: \(daysSincePreviousClose))"
+            return "y:\(year) m:\(month) d:\(day) (c: \(changeString)) (c1: \(change1String) c2: \(change2String) c3: \(change3String) c4: \(change4String) c5: \(change5String)) (su: \(streakUp)) (sd: \(streakDown)) (pcu: \(previousCloseWasUp)) (dpc: \(daysSincePreviousClose))"
         }
     }
     
@@ -49,7 +55,7 @@ struct StockDataLabeled {
     mutating func load(stockDataRaw: StockDataRaw) {
         clear()
         
-        var index = 5
+        var index = 6
         while index < stockDataRaw.nodes.count {
             
             let back1 = stockDataRaw.nodes[index - 1]
@@ -57,20 +63,23 @@ struct StockDataLabeled {
             let back3 = stockDataRaw.nodes[index - 3]
             let back4 = stockDataRaw.nodes[index - 4]
             let back5 = stockDataRaw.nodes[index - 5]
+            let back6 = stockDataRaw.nodes[index - 6]
             
             let current = stockDataRaw.nodes[index]
             
-            let b1p = percentChange(start: back1.close, end: current.close)
-            let b2p = percentChange(start: back2.close, end: current.close)
-            let b3p = percentChange(start: back3.close, end: current.close)
-            let b4p = percentChange(start: back4.close, end: current.close)
-            let b5p = percentChange(start: back5.close, end: current.close)
+            let c1p = percentChange(start: back1.close, end: current.close)
             
-            let s1p = percentChange(start: back1.close, end: current.close)
-            let s2p = percentChange(start: back2.close, end: back1.close)
-            let s3p = percentChange(start: back3.close, end: back2.close)
-            let s4p = percentChange(start: back4.close, end: back3.close)
-            let s5p = percentChange(start: back5.close, end: back4.close)
+            let b1p = percentChange(start: back2.close, end: back1.close)
+            let b2p = percentChange(start: back3.close, end: back1.close)
+            let b3p = percentChange(start: back4.close, end: back1.close)
+            let b4p = percentChange(start: back5.close, end: back1.close)
+            let b5p = percentChange(start: back6.close, end: back1.close)
+            
+            let s1p = percentChange(start: back2.close, end: back1.close)
+            let s2p = percentChange(start: back3.close, end: back2.close)
+            let s3p = percentChange(start: back4.close, end: back3.close)
+            let s4p = percentChange(start: back5.close, end: back4.close)
+            let s5p = percentChange(start: back6.close, end: back5.close)
             
             var streakUp = 0
             var previousCloseWasUp = false
@@ -121,6 +130,7 @@ struct StockDataLabeled {
             let node = StockDataLabeledNode(year: current.dateYear,
                                             month: current.dateMonth,
                                             day: current.dateDay,
+                                            change: c1p,
                                             change1: b1p,
                                             change2: b2p,
                                             change3: b3p,
@@ -137,7 +147,6 @@ struct StockDataLabeled {
     
     private func percentChange(start: Float, end: Float) -> Float {
         guard start > 0.0001 else { return 0.0 }
-        guard end > 0.0001 else { return 0.0 }
         return ((end - start) / start) * 100.0
     }
     
