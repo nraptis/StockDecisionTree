@@ -82,28 +82,47 @@ class BestSplitterInt<Element> {
             
             //numberList
             
-            var remainingOutcomesTrue = totalOutcomesTrue
-            var remainingOutcomesFalse = totalOutcomesFalse
-            
-            
+            //var remainingOutcomesTrue = totalOutcomesTrue
+            //var remainingOutcomesFalse = totalOutcomesFalse
             
             switch comparison {
             case .lessThan:
                 
-                var splitOutcomesFalse = totalOutcomesTrue + totalOutcomesFalse
-                var splitOutcomesTrue = 0
+                
+                // Right now, every data point is classified as "true" outcome...
+                // So, we start out with these numbers
+                
+                var countCorrectlyClassifiedAsTrue = totalOutcomesTrue
+                var countCorrectlyClassifiedAsFalse = 0
+                var countWronglyClassifiedAsTrue = totalOutcomesFalse
+                var countWronglyClassifiedAsFalse = 0
                 
                 var index = 1
                 while index < numberList.count {
                     let number = numberList[index]
                     
-                    remainingOutcomesTrue -= buckets[index - 1].numberOutcomesTrue
-                    remainingOutcomesFalse -= buckets[index - 1].numberOutcomesFalse
+                    countCorrectlyClassifiedAsTrue -= buckets[index - 1].numberOutcomesTrue
+                    countWronglyClassifiedAsFalse += buckets[index - 1].numberOutcomesTrue
                     
-                    splitOutcomesFalse -= buckets[index - 1].nodes.count
-                    splitOutcomesTrue += buckets[index - 1].nodes.count
+                    countCorrectlyClassifiedAsFalse += buckets[index - 1].numberOutcomesFalse
+                    countWronglyClassifiedAsTrue -= buckets[index - 1].numberOutcomesFalse
                     
-                    print("with \(number) split, remaining (t: \(totalOutcomesTrue), f: \(totalOutcomesFalse)), split: (t: \(splitOutcomesTrue) f: \(splitOutcomesFalse))")
+                    let sum = countCorrectlyClassifiedAsTrue + countWronglyClassifiedAsFalse + countCorrectlyClassifiedAsFalse + countWronglyClassifiedAsTrue
+                    
+                    let e = entropy(countCorrectlyClassifiedAsTrue: countCorrectlyClassifiedAsTrue,
+                                    countCorrectlyClassifiedAsFalse: countCorrectlyClassifiedAsFalse,
+                                    countWronglyClassifiedAsTrue: countWronglyClassifiedAsTrue,
+                                    countWronglyClassifiedAsFalse: countWronglyClassifiedAsFalse)
+                    
+                    print("LT with \(number) split:")
+                    print("countCorrectlyClassifiedAsTrue = \(countCorrectlyClassifiedAsTrue)")
+                    print("countWronglyClassifiedAsFalse = \(countWronglyClassifiedAsFalse)")
+                    print("countCorrectlyClassifiedAsFalse = \(countCorrectlyClassifiedAsFalse)")
+                    print("countWronglyClassifiedAsTrue = \(countWronglyClassifiedAsTrue)")
+                    print("entropy: \(e)")
+                    
+                    print("sum = \(sum)")
+                    print("=== LT")
                     
                     
                     index += 1
@@ -117,7 +136,58 @@ class BestSplitterInt<Element> {
             case .greaterThanEqual:
                 break
             case .greaterThan:
-                break
+                
+                // Right now, every data point is classified as "false" outcome...
+                // So, we start out with these numbers
+                
+                var countCorrectlyClassifiedAsTrue = 0
+                var countCorrectlyClassifiedAsFalse = totalOutcomesFalse
+                var countWronglyClassifiedAsTrue = totalOutcomesTrue
+                var countWronglyClassifiedAsFalse = 0
+                
+                print("GT with NIL split:")
+                print("countCorrectlyClassifiedAsTrue = \(countCorrectlyClassifiedAsTrue)")
+                print("countWronglyClassifiedAsFalse = \(countWronglyClassifiedAsFalse)")
+                print("countCorrectlyClassifiedAsFalse = \(countCorrectlyClassifiedAsFalse)")
+                print("countWronglyClassifiedAsTrue = \(countWronglyClassifiedAsTrue)")
+
+                print("=== GT")
+                
+                var index = 1
+                while index < numberList.count {
+                    let number = numberList[index]
+                    
+                    //buckets[index - 1].numberOutcomesTrue
+                    //buckets[index - 1].numberOutcomesFalse
+                    
+                    countWronglyClassifiedAsTrue -= buckets[index - 1].numberOutcomesTrue
+                    countCorrectlyClassifiedAsFalse -= buckets[index - 1].numberOutcomesFalse
+                    
+                    
+                    countCorrectlyClassifiedAsTrue += buckets[index - 1].numberOutcomesTrue
+                    countWronglyClassifiedAsFalse += buckets[index - 1].numberOutcomesFalse
+                    
+                    let sum = countCorrectlyClassifiedAsTrue + countWronglyClassifiedAsFalse + countCorrectlyClassifiedAsFalse + countWronglyClassifiedAsTrue
+                    
+                    let e = entropy(countCorrectlyClassifiedAsTrue: countCorrectlyClassifiedAsTrue,
+                                    countCorrectlyClassifiedAsFalse: countCorrectlyClassifiedAsFalse,
+                                    countWronglyClassifiedAsTrue: countWronglyClassifiedAsTrue,
+                                    countWronglyClassifiedAsFalse: countWronglyClassifiedAsFalse)
+                    
+                    print("GT with \(number) split:")
+                    print("countCorrectlyClassifiedAsTrue = \(countCorrectlyClassifiedAsTrue)")
+                    print("countWronglyClassifiedAsFalse = \(countWronglyClassifiedAsFalse)")
+                    print("countCorrectlyClassifiedAsFalse = \(countCorrectlyClassifiedAsFalse)")
+                    print("countWronglyClassifiedAsTrue = \(countWronglyClassifiedAsTrue)")
+                    print("entropy: \(e)")
+                    
+                    print("sum = \(sum)")
+                    print("=== GT")
+                    
+                    
+                    index += 1
+                }
+                
             }
             
             

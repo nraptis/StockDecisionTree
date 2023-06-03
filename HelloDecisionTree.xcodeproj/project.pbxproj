@@ -20,6 +20,7 @@
 		EB7EEDCB2A2A7CE700C00A7A /* StockDataLabeled.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7EEDCA2A2A7CE700C00A7A /* StockDataLabeled.swift */; };
 		EBA348712A2A9C880071C7B9 /* StockDecisionTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA348702A2A9C880071C7B9 /* StockDecisionTree.swift */; };
 		EBA348732A2AE8EE0071C7B9 /* BestSplitterInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA348722A2AE8EE0071C7B9 /* BestSplitterInt.swift */; };
+		EBA348752A2BD7C60071C7B9 /* Entropy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA348742A2BD7C60071C7B9 /* Entropy.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +57,7 @@
 		EB7EEDCA2A2A7CE700C00A7A /* StockDataLabeled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDataLabeled.swift; sourceTree = "<group>"; };
 		EBA348702A2A9C880071C7B9 /* StockDecisionTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDecisionTree.swift; sourceTree = "<group>"; };
 		EBA348722A2AE8EE0071C7B9 /* BestSplitterInt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestSplitterInt.swift; sourceTree = "<group>"; };
+		EBA348742A2BD7C60071C7B9 /* Entropy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entropy.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +118,7 @@
 				EB7EEDC82A2A707E00C00A7A /* ViewModel.swift */,
 				EBA348702A2A9C880071C7B9 /* StockDecisionTree.swift */,
 				EBA348722A2AE8EE0071C7B9 /* BestSplitterInt.swift */,
+				EBA348742A2BD7C60071C7B9 /* Entropy.swift */,
 			);
 			path = HelloDecisionTree;
 			sourceTree = "<group>";
@@ -285,6 +288,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EB7EEDCB2A2A7CE700C00A7A /* StockDataLabeled.swift in Sources */,
+				EBA348752A2BD7C60071C7B9 /* Entropy.swift in Sources */,
 				EB7EED9C2A2A6C7000C00A7A /* ContentView.swift in Sources */,
 				EBA348712A2A9C880071C7B9 /* StockDecisionTree.swift in Sources */,
 				EB7EED9A2A2A6C7000C00A7A /* HelloDecisionTreeApp.swift in Sources */,
