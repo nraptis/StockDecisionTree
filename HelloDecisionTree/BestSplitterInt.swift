@@ -76,6 +76,15 @@ class BestSplitterInt<Element> {
             totalOutcomesFalse += buckets[index].numberOutcomesFalse
         }
         
+        var nodes = [Node]()
+        for index in buckets.indices {
+            for node in buckets[index].nodes {
+                nodes.append(node)
+            }
+        }
+        nodes.shuffle()
+        
+        
         //print(buckets)
         
         for comparison in comparisons {
@@ -88,42 +97,65 @@ class BestSplitterInt<Element> {
             switch comparison {
             case .lessThan:
                 
-                
-                // Right now, every data point is classified as "true" outcome...
+                // Right now, every data point is classified as "false" outcome...
                 // So, we start out with these numbers
                 
-                var countCorrectlyClassifiedAsTrue = totalOutcomesTrue
-                var countCorrectlyClassifiedAsFalse = 0
-                var countWronglyClassifiedAsTrue = totalOutcomesFalse
-                var countWronglyClassifiedAsFalse = 0
+                var countTruePositives = 0
+                var countFalsePositives = 0
+                var countTrueNegatives = totalOutcomesFalse
+                var countFalseNegatives = totalOutcomesTrue
                 
                 var index = 1
                 while index < numberList.count {
                     let number = numberList[index]
                     
-                    countCorrectlyClassifiedAsTrue -= buckets[index - 1].numberOutcomesTrue
-                    countWronglyClassifiedAsFalse += buckets[index - 1].numberOutcomesTrue
                     
-                    countCorrectlyClassifiedAsFalse += buckets[index - 1].numberOutcomesFalse
-                    countWronglyClassifiedAsTrue -= buckets[index - 1].numberOutcomesFalse
+                    countTruePositives += buckets[index - 1].numberOutcomesTrue
+                    countFalsePositives += buckets[index - 1].numberOutcomesFalse
                     
-                    let sum = countCorrectlyClassifiedAsTrue + countWronglyClassifiedAsFalse + countCorrectlyClassifiedAsFalse + countWronglyClassifiedAsTrue
+                    countFalseNegatives -= buckets[index - 1].numberOutcomesTrue
+                    countTrueNegatives -= buckets[index - 1].numberOutcomesFalse
                     
-                    let e = entropy(countCorrectlyClassifiedAsTrue: countCorrectlyClassifiedAsTrue,
-                                    countCorrectlyClassifiedAsFalse: countCorrectlyClassifiedAsFalse,
-                                    countWronglyClassifiedAsTrue: countWronglyClassifiedAsTrue,
-                                    countWronglyClassifiedAsFalse: countWronglyClassifiedAsFalse)
                     
+                    let sum = countTruePositives + countFalsePositives + countTrueNegatives + countFalseNegatives
+
                     print("LT with \(number) split:")
-                    print("countCorrectlyClassifiedAsTrue = \(countCorrectlyClassifiedAsTrue)")
-                    print("countWronglyClassifiedAsFalse = \(countWronglyClassifiedAsFalse)")
-                    print("countCorrectlyClassifiedAsFalse = \(countCorrectlyClassifiedAsFalse)")
-                    print("countWronglyClassifiedAsTrue = \(countWronglyClassifiedAsTrue)")
-                    print("entropy: \(e)")
-                    
+                    print("R countTruePositives = \(countTruePositives)")
+                    print("R countFalsePositives = \(countFalsePositives)")
+                    print("R countFalseNegatives = \(countTrueNegatives)")
+                    print("R countTrueNegatives = \(countFalseNegatives)")
                     print("sum = \(sum)")
-                    print("=== LT")
                     
+                    
+                    
+                    var truePositives = [Node]()
+                    var falsePositives = [Node]()
+                    var trueNegatives = [Node]()
+                    var falseNegatives = [Node]()
+                    
+                    for node in nodes {
+                        if node.value < number {
+                            if node.outcome {
+                                truePositives.append(node)
+                            } else {
+                                falsePositives.append(node)
+                            }
+                        } else {
+                            if node.outcome {
+                                falseNegatives.append(node)
+                            } else {
+                                trueNegatives.append(node)
+                            }
+                        }
+                    }
+                    
+                    print("M truePositives = \(truePositives.count)")
+                    print("M falsePositives = \(falsePositives.count)")
+                    print("M trueNegatives = \(trueNegatives.count)")
+                    print("M falseNegatives = \(falseNegatives.count)")
+                    
+                    
+                    print("=== LT")
                     
                     index += 1
                 }
@@ -137,61 +169,64 @@ class BestSplitterInt<Element> {
                 break
             case .greaterThan:
                 
-                // Right now, every data point is classified as "false" outcome...
-                // So, we start out with these numbers
+                var countTruePositives = 0
+                var countFalsePositives = 0
+                var countTrueNegatives = totalOutcomesFalse
+                var countFalseNegatives = totalOutcomesTrue
                 
-                var countCorrectlyClassifiedAsTrue = 0
-                var countCorrectlyClassifiedAsFalse = totalOutcomesFalse
-                var countWronglyClassifiedAsTrue = totalOutcomesTrue
-                var countWronglyClassifiedAsFalse = 0
-                
-                print("GT with NIL split:")
-                print("countCorrectlyClassifiedAsTrue = \(countCorrectlyClassifiedAsTrue)")
-                print("countWronglyClassifiedAsFalse = \(countWronglyClassifiedAsFalse)")
-                print("countCorrectlyClassifiedAsFalse = \(countCorrectlyClassifiedAsFalse)")
-                print("countWronglyClassifiedAsTrue = \(countWronglyClassifiedAsTrue)")
-
-                print("=== GT")
-                
-                var index = 1
-                while index < numberList.count {
+                var index = numberList.count - 2
+                while index >= 0 {
                     let number = numberList[index]
+
+                    countTruePositives += buckets[index + 1].numberOutcomesTrue
+                    countFalsePositives += buckets[index + 1].numberOutcomesFalse
                     
-                    //buckets[index - 1].numberOutcomesTrue
-                    //buckets[index - 1].numberOutcomesFalse
+                    countFalseNegatives -= buckets[index + 1].numberOutcomesTrue
+                    countTrueNegatives -= buckets[index + 1].numberOutcomesFalse
                     
-                    countWronglyClassifiedAsTrue -= buckets[index - 1].numberOutcomesTrue
-                    countCorrectlyClassifiedAsFalse -= buckets[index - 1].numberOutcomesFalse
-                    
-                    
-                    countCorrectlyClassifiedAsTrue += buckets[index - 1].numberOutcomesTrue
-                    countWronglyClassifiedAsFalse += buckets[index - 1].numberOutcomesFalse
-                    
-                    let sum = countCorrectlyClassifiedAsTrue + countWronglyClassifiedAsFalse + countCorrectlyClassifiedAsFalse + countWronglyClassifiedAsTrue
-                    
-                    let e = entropy(countCorrectlyClassifiedAsTrue: countCorrectlyClassifiedAsTrue,
-                                    countCorrectlyClassifiedAsFalse: countCorrectlyClassifiedAsFalse,
-                                    countWronglyClassifiedAsTrue: countWronglyClassifiedAsTrue,
-                                    countWronglyClassifiedAsFalse: countWronglyClassifiedAsFalse)
-                    
+                    let sum = countTruePositives + countFalsePositives + countTrueNegatives + countFalseNegatives
+
                     print("GT with \(number) split:")
-                    print("countCorrectlyClassifiedAsTrue = \(countCorrectlyClassifiedAsTrue)")
-                    print("countWronglyClassifiedAsFalse = \(countWronglyClassifiedAsFalse)")
-                    print("countCorrectlyClassifiedAsFalse = \(countCorrectlyClassifiedAsFalse)")
-                    print("countWronglyClassifiedAsTrue = \(countWronglyClassifiedAsTrue)")
-                    print("entropy: \(e)")
-                    
+                    print("R countTruePositives = \(countTruePositives)")
+                    print("R countFalsePositives = \(countFalsePositives)")
+                    print("R countFalseNegatives = \(countTrueNegatives)")
+                    print("R countTrueNegatives = \(countFalseNegatives)")
                     print("sum = \(sum)")
+                    
+                    
+                    
+                    var truePositives = [Node]()
+                    var falsePositives = [Node]()
+                    var trueNegatives = [Node]()
+                    var falseNegatives = [Node]()
+                    
+                    for node in nodes {
+                        if node.value > number {
+                            if node.outcome {
+                                truePositives.append(node)
+                            } else {
+                                falsePositives.append(node)
+                            }
+                        } else {
+                            if node.outcome {
+                                falseNegatives.append(node)
+                            } else {
+                                trueNegatives.append(node)
+                            }
+                        }
+                    }
+                    
+                    print("M truePositives = \(truePositives.count)")
+                    print("M falsePositives = \(falsePositives.count)")
+                    print("M trueNegatives = \(trueNegatives.count)")
+                    print("M falseNegatives = \(falseNegatives.count)")
+                    
+                    
                     print("=== GT")
                     
-                    
-                    index += 1
+                    index -= 1
                 }
-                
             }
-            
-            
-            
         }
         
         
