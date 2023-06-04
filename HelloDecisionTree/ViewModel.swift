@@ -40,7 +40,7 @@ actor ViewModel: ObservableObject {
         
         print("\(training.count) training nodes \(testing.count) testing nodes")
         
-        decisionTree.train(nodes: training)
+        decisionTree.train(nodes: testing)
         
     }
     

@@ -1,34 +1,34 @@
 //
-//  BestSplitterInt.swift
+//  DataSplitter.swift
 //  HelloDecisionTree
 //
-//  Created by Screwy Uncle Louie on 6/2/23.
+//  Created by Screwy Uncle Louie on 6/3/23.
 //
 
 import Foundation
 
-class BestSplitterInt<Element> {
+class DataSplitter<Type: Comparable & Hashable & Defaultable> {
     
     struct Split {
-        let value: Int
+        let value: Type
         let comparison: Comparison
     }
     
     struct Node {
-        let value: Int
+        let value: Type
         let outcome: Bool
     }
     
     struct Bucket {
         var nodes = [Node]()
-        let value: Int
+        let value: Type
         var numberOutcomesTrue = 0
         var numberOutcomesFalse = 0
     }
     
-    var bucketDict = [Int: Bucket]()
+    var bucketDict = [Type: Bucket]()
     
-    func add(value: Int, outcome: Bool) {
+    func add(value: Type, outcome: Bool) {
         let node = Node(value: value,
                         outcome: outcome)
         bucketDict[value, default: Bucket(value: value)].nodes.append(node)
@@ -36,7 +36,7 @@ class BestSplitterInt<Element> {
     
     func solve(comparisons: [Comparison]) -> Split? {
         
-        var bestValue = 0
+        var bestValue = Type.defaultValue
         var bestComparison = Comparison.equal
         
         var buckets = [Bucket]()
@@ -52,7 +52,7 @@ class BestSplitterInt<Element> {
             $0.value < $1.value
         }
         
-        var numberList = [Int]()
+        var numberList = [Type]()
         
         for bucket in buckets {
             print("bucket: \(bucket.value), \(bucket.nodes.count) nodes")

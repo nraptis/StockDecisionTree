@@ -82,14 +82,26 @@ class StockDecisionTree {
         
         guard nodes.count > 0 else { return }
         
-        
+        /*
         let intSplitter = BestSplitterInt<LabeledNode>()
         
         for node in nodes {
-            intSplitter.add(value: node.streakUp, outcome: outcome(node: node))
+            intSplitter.add(value: node.streakDown, outcome: outcome(node: node))
         }
         
-        if let split = intSplitter.solve(comparisons: [.greaterThan, .lessThan]) {
+        if let split = intSplitter.solve(comparisons: [.lessThan, .lessThanEqual, .equal, .greaterThanEqual, .greaterThan]) {
+            print("Best Split: \(split.value), \(split.comparison)")
+        }
+        */
+        
+        
+        let chimpSplitter = DataSplitter<Float>()
+        
+        for node in nodes {
+            chimpSplitter.add(value: node.change1, outcome: outcome(node: node))
+        }
+        
+        if let split = chimpSplitter.solve(comparisons: [.lessThan, .lessThanEqual, .equal, .greaterThanEqual, .greaterThan]) {
             print("Best Split: \(split.value), \(split.comparison)")
         }
         
