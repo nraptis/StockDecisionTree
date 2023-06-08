@@ -23,6 +23,9 @@
 		EBA348752A2BD7C60071C7B9 /* Entropy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA348742A2BD7C60071C7B9 /* Entropy.swift */; };
 		EBA348772A2C34900071C7B9 /* DataSplitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA348762A2C34900071C7B9 /* DataSplitter.swift */; };
 		EBA348792A2C36680071C7B9 /* Defaultable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA348782A2C36680071C7B9 /* Defaultable.swift */; };
+		EBD7FD482A316BF900445690 /* Gini.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD7FD472A316BF900445690 /* Gini.swift */; };
+		EBD7FD4A2A316F0400445690 /* Quality.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD7FD492A316F0400445690 /* Quality.swift */; };
+		EBD7FD4C2A31733800445690 /* Bool+Comparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBD7FD4B2A31733800445690 /* Bool+Comparable.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +65,9 @@
 		EBA348742A2BD7C60071C7B9 /* Entropy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entropy.swift; sourceTree = "<group>"; };
 		EBA348762A2C34900071C7B9 /* DataSplitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSplitter.swift; sourceTree = "<group>"; };
 		EBA348782A2C36680071C7B9 /* Defaultable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaultable.swift; sourceTree = "<group>"; };
+		EBD7FD472A316BF900445690 /* Gini.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gini.swift; sourceTree = "<group>"; };
+		EBD7FD492A316F0400445690 /* Quality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Quality.swift; sourceTree = "<group>"; };
+		EBD7FD4B2A31733800445690 /* Bool+Comparable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+Comparable.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,8 +129,11 @@
 				EBA348702A2A9C880071C7B9 /* StockDecisionTree.swift */,
 				EBA348722A2AE8EE0071C7B9 /* BestSplitterInt.swift */,
 				EBA348742A2BD7C60071C7B9 /* Entropy.swift */,
+				EBD7FD472A316BF900445690 /* Gini.swift */,
+				EBD7FD492A316F0400445690 /* Quality.swift */,
 				EBA348762A2C34900071C7B9 /* DataSplitter.swift */,
 				EBA348782A2C36680071C7B9 /* Defaultable.swift */,
+				EBD7FD4B2A31733800445690 /* Bool+Comparable.swift */,
 			);
 			path = HelloDecisionTree;
 			sourceTree = "<group>";
@@ -294,9 +303,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				EBA348772A2C34900071C7B9 /* DataSplitter.swift in Sources */,
+				EBD7FD4A2A316F0400445690 /* Quality.swift in Sources */,
 				EB7EEDCB2A2A7CE700C00A7A /* StockDataLabeled.swift in Sources */,
 				EBA348752A2BD7C60071C7B9 /* Entropy.swift in Sources */,
 				EB7EED9C2A2A6C7000C00A7A /* ContentView.swift in Sources */,
+				EBD7FD482A316BF900445690 /* Gini.swift in Sources */,
+				EBD7FD4C2A31733800445690 /* Bool+Comparable.swift in Sources */,
 				EBA348712A2A9C880071C7B9 /* StockDecisionTree.swift in Sources */,
 				EB7EED9A2A2A6C7000C00A7A /* HelloDecisionTreeApp.swift in Sources */,
 				EB7EEDC92A2A707E00C00A7A /* ViewModel.swift in Sources */,

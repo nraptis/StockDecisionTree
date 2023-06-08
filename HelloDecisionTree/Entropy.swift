@@ -7,6 +7,25 @@
 
 import Foundation
 
+func entropy(truePositives: Int, trueNegatives: Int, falsePositives: Int, falseNegatives: Int) -> Float {
+    
+    let count = truePositives + falsePositives + trueNegatives + falseNegatives
+    guard count > 0 else {
+        fatalError("cannot compute entropy with no classifications")
+    }
+    
+    let p = Float(truePositives + falsePositives) / Float(count)
+    let q = Float(trueNegatives + falseNegatives) / Float(count)
+    
+    let gini = 1.0 - (p * p + q * q)
+    
+    
+    //let entropy = -p * log2(p) - q * log2(q)
+    
+    //return entropy
+    return gini
+}
+
 func entropy(countCorrectlyClassifiedAsTrue: Int, countCorrectlyClassifiedAsFalse: Int, countWronglyClassifiedAsTrue: Int, countWronglyClassifiedAsFalse: Int) -> Float {
     let totalOutcomes = Float(countCorrectlyClassifiedAsTrue + countCorrectlyClassifiedAsFalse + countWronglyClassifiedAsTrue + countWronglyClassifiedAsFalse)
         

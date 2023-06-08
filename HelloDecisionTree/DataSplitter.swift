@@ -12,6 +12,12 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
     struct Split {
         let value: Type
         let comparison: Comparison
+        
+        let truePositives: Int
+        let falsePositives: Int
+        let trueNegatives: Int
+        let falseNegatives: Int
+        let quality: Float
     }
     
     struct Node {
@@ -37,7 +43,14 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
     func solve(comparisons: [Comparison]) -> Split? {
         
         var bestValue = Type.defaultValue
+        var bestQuality = Float(-100_000_000_000_000_000_000.0)
         var bestComparison = Comparison.equal
+        
+        var bestCountTruePositives = 0
+        var bestCountFalsePositives = 0
+        var bestCountTrueNegatives = 0
+        var bestCountFalseNegatives = 0
+        
         
         var buckets = [Bucket]()
         for bucket in bucketDict.values {
@@ -52,12 +65,7 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
             $0.value < $1.value
         }
         
-        var numberList = [Type]()
-        
-        for bucket in buckets {
-            print("bucket: \(bucket.value), \(bucket.nodes.count) nodes")
-            numberList.append(bucket.value)
-        }
+        let numberList = buckets.map { $0.value }
         
         var totalOutcomesTrue = 0
         var totalOutcomesFalse = 0
@@ -76,30 +84,10 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
             totalOutcomesFalse += buckets[index].numberOutcomesFalse
         }
         
-        var nodes = [Node]()
-        for index in buckets.indices {
-            for node in buckets[index].nodes {
-                nodes.append(node)
-            }
-        }
-        nodes.shuffle()
-        
-        
-        //print(buckets)
-        
         for comparison in comparisons {
-            
-            //numberList
-            
-            //var remainingOutcomesTrue = totalOutcomesTrue
-            //var remainingOutcomesFalse = totalOutcomesFalse
             
             switch comparison {
             case .lessThan:
-                
-                // Right now, every data point is classified as "false" outcome...
-                // So, we start out with these numbers
-                
                 var countTruePositives = 0
                 var countFalsePositives = 0
                 var countTrueNegatives = totalOutcomesFalse
@@ -117,45 +105,20 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
                     countTrueNegatives -= buckets[index - 1].numberOutcomesFalse
                     
                     
-                    let sum = countTruePositives + countFalsePositives + countTrueNegatives + countFalseNegatives
-
-                    print("LT with \(number) split:")
-                    print("R countTruePositives = \(countTruePositives)")
-                    print("R countFalsePositives = \(countFalsePositives)")
-                    print("R countTrueNegatives = \(countTrueNegatives)")
-                    print("R countFalseNegatives = \(countFalseNegatives)")
-                    print("sum = \(sum)")
-                    
-                    
-                    
-                    var truePositives = [Node]()
-                    var falsePositives = [Node]()
-                    var trueNegatives = [Node]()
-                    var falseNegatives = [Node]()
-                    
-                    for node in nodes {
-                        if node.value < number {
-                            if node.outcome {
-                                truePositives.append(node)
-                            } else {
-                                falsePositives.append(node)
-                            }
-                        } else {
-                            if node.outcome {
-                                falseNegatives.append(node)
-                            } else {
-                                trueNegatives.append(node)
-                            }
-                        }
+                    let _quality = quality(truePositives: countTruePositives,
+                                           trueNegatives: countTrueNegatives,
+                                           falsePositives: countFalsePositives,
+                                           falseNegatives: countFalseNegatives)
+                    if _quality > bestQuality {
+                        bestQuality = _quality
+                        bestComparison = .lessThan
+                        bestValue = number
+                        bestCountTruePositives = countTruePositives
+                        bestCountTrueNegatives = countTrueNegatives
+                        bestCountFalsePositives = countFalsePositives
+                        bestCountFalseNegatives = countFalseNegatives
+                        print("lt e(\(_quality)) \(bestValue) <")
                     }
-                    
-                    print("M truePositives = \(truePositives.count)")
-                    print("M falsePositives = \(falsePositives.count)")
-                    print("M trueNegatives = \(trueNegatives.count)")
-                    print("M falseNegatives = \(falseNegatives.count)")
-                    
-                    
-                    print("=== LT")
                     
                     index += 1
                 }
@@ -175,64 +138,31 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
                 while index < numberList.count {
                     let number = numberList[index]
                     
-                    
                     countTruePositives += buckets[index].numberOutcomesTrue
                     countFalsePositives += buckets[index].numberOutcomesFalse
                     
                     countFalseNegatives -= buckets[index].numberOutcomesTrue
                     countTrueNegatives -= buckets[index].numberOutcomesFalse
-                    
-                    
-                    let sum = countTruePositives + countFalsePositives + countTrueNegatives + countFalseNegatives
 
-                    print("LTE with \(number) split:")
-                    print("R countTruePositives = \(countTruePositives)")
-                    print("R countFalsePositives = \(countFalsePositives)")
-                    print("R countTrueNegatives = \(countTrueNegatives)")
-                    print("R countFalseNegatives = \(countFalseNegatives)")
-                    print("sum = \(sum)")
-                    
-                    
-                    
-                    var truePositives = [Node]()
-                    var falsePositives = [Node]()
-                    var trueNegatives = [Node]()
-                    var falseNegatives = [Node]()
-                    
-                    for node in nodes {
-                        if node.value <= number {
-                            if node.outcome {
-                                truePositives.append(node)
-                            } else {
-                                falsePositives.append(node)
-                            }
-                        } else {
-                            if node.outcome {
-                                falseNegatives.append(node)
-                            } else {
-                                trueNegatives.append(node)
-                            }
-                        }
+                    let _quality = quality(truePositives: countTruePositives,
+                                           trueNegatives: countTrueNegatives,
+                                           falsePositives: countFalsePositives,
+                                           falseNegatives: countFalseNegatives)
+                    if _quality > bestQuality {
+                        bestQuality = _quality
+                        bestComparison = .lessThanEqual
+                        bestValue = number
+                        bestCountTruePositives = countTruePositives
+                        bestCountTrueNegatives = countTrueNegatives
+                        bestCountFalsePositives = countFalsePositives
+                        bestCountFalseNegatives = countFalseNegatives
+                        print("lte e(\(_quality)) \(bestValue) <=")
                     }
-                    
-                    print("M truePositives = \(truePositives.count)")
-                    print("M falsePositives = \(falsePositives.count)")
-                    print("M trueNegatives = \(trueNegatives.count)")
-                    print("M falseNegatives = \(falseNegatives.count)")
-                    
-                    
-                    print("=== LTE")
                     
                     index += 1
                 }
                 
             case .equal:
-                
-                // Right now, every data point is classified as "false" outcome...
-                // So, we start out with these numbers
-                
-                
-                
                 var index = 0
                 while index < numberList.count {
                     let number = numberList[index]
@@ -248,46 +178,20 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
                     countFalseNegatives -= buckets[index].numberOutcomesTrue
                     countTrueNegatives -= buckets[index].numberOutcomesFalse
                     
-                    
-                    let sum = countTruePositives + countFalsePositives + countTrueNegatives + countFalseNegatives
-
-                    print("EEE with \(number) split:")
-                    print("R countTruePositives = \(countTruePositives)")
-                    print("R countFalsePositives = \(countFalsePositives)")
-                    print("R countTrueNegatives = \(countTrueNegatives)")
-                    print("R countFalseNegatives = \(countFalseNegatives)")
-                    print("sum = \(sum)")
-                    
-                    
-                    
-                    var truePositives = [Node]()
-                    var falsePositives = [Node]()
-                    var trueNegatives = [Node]()
-                    var falseNegatives = [Node]()
-                    
-                    for node in nodes {
-                        if node.value == number {
-                            if node.outcome {
-                                truePositives.append(node)
-                            } else {
-                                falsePositives.append(node)
-                            }
-                        } else {
-                            if node.outcome {
-                                falseNegatives.append(node)
-                            } else {
-                                trueNegatives.append(node)
-                            }
-                        }
+                    let _quality = quality(truePositives: countTruePositives,
+                                           trueNegatives: countTrueNegatives,
+                                           falsePositives: countFalsePositives,
+                                           falseNegatives: countFalseNegatives)
+                    if _quality > bestQuality {
+                        bestQuality = _quality
+                        bestComparison = .equal
+                        bestValue = number
+                        bestCountTruePositives = countTruePositives
+                        bestCountTrueNegatives = countTrueNegatives
+                        bestCountFalsePositives = countFalsePositives
+                        bestCountFalseNegatives = countFalseNegatives
+                        print("eee e(\(_quality)) \(bestValue) ==")
                     }
-                    
-                    print("M truePositives = \(truePositives.count)")
-                    print("M falsePositives = \(falsePositives.count)")
-                    print("M trueNegatives = \(trueNegatives.count)")
-                    print("M falseNegatives = \(falseNegatives.count)")
-                    
-                    
-                    print("=== EEE")
                     
                     index += 1
                 }
@@ -310,45 +214,20 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
                     countFalseNegatives -= buckets[index].numberOutcomesTrue
                     countTrueNegatives -= buckets[index].numberOutcomesFalse
                     
-                    let sum = countTruePositives + countFalsePositives + countTrueNegatives + countFalseNegatives
-
-                    print("GTE with \(number) split:")
-                    print("R countTruePositives = \(countTruePositives)")
-                    print("R countFalsePositives = \(countFalsePositives)")
-                    print("R countTrueNegatives = \(countTrueNegatives)")
-                    print("R countFalseNegatives = \(countFalseNegatives)")
-                    print("sum = \(sum)")
-                    
-                    
-                    
-                    var truePositives = [Node]()
-                    var falsePositives = [Node]()
-                    var trueNegatives = [Node]()
-                    var falseNegatives = [Node]()
-                    
-                    for node in nodes {
-                        if node.value >= number {
-                            if node.outcome {
-                                truePositives.append(node)
-                            } else {
-                                falsePositives.append(node)
-                            }
-                        } else {
-                            if node.outcome {
-                                falseNegatives.append(node)
-                            } else {
-                                trueNegatives.append(node)
-                            }
-                        }
+                    let _quality = quality(truePositives: countTruePositives,
+                                           trueNegatives: countTrueNegatives,
+                                           falsePositives: countFalsePositives,
+                                           falseNegatives: countFalseNegatives)
+                    if _quality > bestQuality {
+                        bestQuality = _quality
+                        bestComparison = .greaterThanEqual
+                        bestValue = number
+                        bestCountTruePositives = countTruePositives
+                        bestCountTrueNegatives = countTrueNegatives
+                        bestCountFalsePositives = countFalsePositives
+                        bestCountFalseNegatives = countFalseNegatives
+                        print("gte e(\(_quality)) \(bestValue) >=")
                     }
-                    
-                    print("M truePositives = \(truePositives.count)")
-                    print("M falsePositives = \(falsePositives.count)")
-                    print("M trueNegatives = \(trueNegatives.count)")
-                    print("M falseNegatives = \(falseNegatives.count)")
-                    
-                    
-                    print("=== GTE")
                     
                     index -= 1
                 }
@@ -370,52 +249,35 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
                     countFalseNegatives -= buckets[index + 1].numberOutcomesTrue
                     countTrueNegatives -= buckets[index + 1].numberOutcomesFalse
                     
-                    let sum = countTruePositives + countFalsePositives + countTrueNegatives + countFalseNegatives
-
-                    print("GT with \(number) split:")
-                    print("R countTruePositives = \(countTruePositives)")
-                    print("R countFalsePositives = \(countFalsePositives)")
-                    print("R countTrueNegatives = \(countTrueNegatives)")
-                    print("R countFalseNegatives = \(countFalseNegatives)")
                     
-                    var truePositives = [Node]()
-                    var falsePositives = [Node]()
-                    var trueNegatives = [Node]()
-                    var falseNegatives = [Node]()
-                    
-                    for node in nodes {
-                        if node.value > number {
-                            if node.outcome {
-                                truePositives.append(node)
-                            } else {
-                                falsePositives.append(node)
-                            }
-                        } else {
-                            if node.outcome {
-                                falseNegatives.append(node)
-                            } else {
-                                trueNegatives.append(node)
-                            }
-                        }
+                    let _quality = quality(truePositives: countTruePositives,
+                                     trueNegatives: countTrueNegatives,
+                                     falsePositives: countFalsePositives,
+                                     falseNegatives: countFalseNegatives)
+                    if _quality > bestQuality {
+                        bestQuality = _quality
+                        bestComparison = .greaterThan
+                        bestValue = number
+                        bestCountTruePositives = countTruePositives
+                        bestCountTrueNegatives = countTrueNegatives
+                        bestCountFalsePositives = countFalsePositives
+                        bestCountFalseNegatives = countFalseNegatives
+                        print("gt e(\(_quality)) \(bestValue) >")
                     }
-                    
-                    print("M truePositives = \(truePositives.count)")
-                    print("M falsePositives = \(falsePositives.count)")
-                    print("M trueNegatives = \(trueNegatives.count)")
-                    print("M falseNegatives = \(falseNegatives.count)")
-                    
-                    
-                    print("=== GT")
                     
                     index -= 1
                 }
             }
         }
         
-        
         return Split(value: bestValue,
-                     comparison: bestComparison)
+                     comparison: bestComparison,
+                     truePositives: bestCountTruePositives,
+                     falsePositives: bestCountFalsePositives,
+                     trueNegatives: bestCountTrueNegatives,
+                     falseNegatives: bestCountFalseNegatives,
+                     quality: bestQuality)
+        
     }
-    
     
 }

@@ -32,5 +32,20 @@ final class HelloDecisionTreeTests: XCTestCase {
             // Put the code you want to measure the time of here.
         }
     }
+    
+    func testEntropyOne() {
+        let e = entropy(truePositives: 5, trueNegatives: 0, falsePositives: 0, falseNegatives: 0)
+        print("e-5-0-0-0: \(e)")
+    }
+    
+    func testEntropyTwo() {
+        let e = entropy(truePositives: 5, trueNegatives: 5, falsePositives: 0, falseNegatives: 0)
+        print("e-5-5-0-0: \(e)")
+    }
+    
+    func testEntropyThree() {
+        let e = entropy(truePositives: 0, trueNegatives: 5, falsePositives: 0, falseNegatives: 0)
+        print("e-0-5-0-0: \(e)")
+    }
 
 }
