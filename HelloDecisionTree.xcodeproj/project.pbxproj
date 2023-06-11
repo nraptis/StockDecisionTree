@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EB4CD11D2A35E9C700D209D8 /* StockRandomForest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB4CD11C2A35E9C700D209D8 /* StockRandomForest.swift */; };
 		EB7EED9A2A2A6C7000C00A7A /* HelloDecisionTreeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7EED992A2A6C7000C00A7A /* HelloDecisionTreeApp.swift */; };
 		EB7EED9C2A2A6C7000C00A7A /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7EED9B2A2A6C7000C00A7A /* ContentView.swift */; };
 		EB7EED9E2A2A6C7000C00A7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EB7EED9D2A2A6C7000C00A7A /* Assets.xcassets */; };
@@ -19,7 +20,6 @@
 		EB7EEDC92A2A707E00C00A7A /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7EEDC82A2A707E00C00A7A /* ViewModel.swift */; };
 		EB7EEDCB2A2A7CE700C00A7A /* StockDataLabeled.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB7EEDCA2A2A7CE700C00A7A /* StockDataLabeled.swift */; };
 		EBA348712A2A9C880071C7B9 /* StockDecisionTree.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA348702A2A9C880071C7B9 /* StockDecisionTree.swift */; };
-		EBA348732A2AE8EE0071C7B9 /* BestSplitterInt.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA348722A2AE8EE0071C7B9 /* BestSplitterInt.swift */; };
 		EBA348752A2BD7C60071C7B9 /* Entropy.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA348742A2BD7C60071C7B9 /* Entropy.swift */; };
 		EBA348772A2C34900071C7B9 /* DataSplitter.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA348762A2C34900071C7B9 /* DataSplitter.swift */; };
 		EBA348792A2C36680071C7B9 /* Defaultable.swift in Sources */ = {isa = PBXBuildFile; fileRef = EBA348782A2C36680071C7B9 /* Defaultable.swift */; };
@@ -46,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EB4CD11C2A35E9C700D209D8 /* StockRandomForest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockRandomForest.swift; sourceTree = "<group>"; };
 		EB7EED962A2A6C7000C00A7A /* HelloDecisionTree.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HelloDecisionTree.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EB7EED992A2A6C7000C00A7A /* HelloDecisionTreeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelloDecisionTreeApp.swift; sourceTree = "<group>"; };
 		EB7EED9B2A2A6C7000C00A7A /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -61,7 +62,6 @@
 		EB7EEDC82A2A707E00C00A7A /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		EB7EEDCA2A2A7CE700C00A7A /* StockDataLabeled.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDataLabeled.swift; sourceTree = "<group>"; };
 		EBA348702A2A9C880071C7B9 /* StockDecisionTree.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDecisionTree.swift; sourceTree = "<group>"; };
-		EBA348722A2AE8EE0071C7B9 /* BestSplitterInt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BestSplitterInt.swift; sourceTree = "<group>"; };
 		EBA348742A2BD7C60071C7B9 /* Entropy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Entropy.swift; sourceTree = "<group>"; };
 		EBA348762A2C34900071C7B9 /* DataSplitter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSplitter.swift; sourceTree = "<group>"; };
 		EBA348782A2C36680071C7B9 /* Defaultable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaultable.swift; sourceTree = "<group>"; };
@@ -127,7 +127,7 @@
 				EB7EEDCA2A2A7CE700C00A7A /* StockDataLabeled.swift */,
 				EB7EEDC82A2A707E00C00A7A /* ViewModel.swift */,
 				EBA348702A2A9C880071C7B9 /* StockDecisionTree.swift */,
-				EBA348722A2AE8EE0071C7B9 /* BestSplitterInt.swift */,
+				EB4CD11C2A35E9C700D209D8 /* StockRandomForest.swift */,
 				EBA348742A2BD7C60071C7B9 /* Entropy.swift */,
 				EBD7FD472A316BF900445690 /* Gini.swift */,
 				EBD7FD492A316F0400445690 /* Quality.swift */,
@@ -304,6 +304,7 @@
 			files = (
 				EBA348772A2C34900071C7B9 /* DataSplitter.swift in Sources */,
 				EBD7FD4A2A316F0400445690 /* Quality.swift in Sources */,
+				EB4CD11D2A35E9C700D209D8 /* StockRandomForest.swift in Sources */,
 				EB7EEDCB2A2A7CE700C00A7A /* StockDataLabeled.swift in Sources */,
 				EBA348752A2BD7C60071C7B9 /* Entropy.swift in Sources */,
 				EB7EED9C2A2A6C7000C00A7A /* ContentView.swift in Sources */,
@@ -312,7 +313,6 @@
 				EBA348712A2A9C880071C7B9 /* StockDecisionTree.swift in Sources */,
 				EB7EED9A2A2A6C7000C00A7A /* HelloDecisionTreeApp.swift in Sources */,
 				EB7EEDC92A2A707E00C00A7A /* ViewModel.swift in Sources */,
-				EBA348732A2AE8EE0071C7B9 /* BestSplitterInt.swift in Sources */,
 				EB7EEDC72A2A6FC600C00A7A /* StockDataRaw.swift in Sources */,
 				EBA348792A2C36680071C7B9 /* Defaultable.swift in Sources */,
 			);

@@ -43,7 +43,7 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
     func solve(comparisons: [Comparison]) -> Split? {
         
         var bestValue = Type.defaultValue
-        var bestQuality = Float(-100_000_000_000_000_000_000.0)
+        var bestQuality = Float(-100_000_000_000_000_000_000_000_000_000_000_000_000.0)
         var bestComparison = Comparison.equal
         
         var bestCountTruePositives = 0
@@ -117,7 +117,6 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
                         bestCountTrueNegatives = countTrueNegatives
                         bestCountFalsePositives = countFalsePositives
                         bestCountFalseNegatives = countFalseNegatives
-                        print("lt e(\(_quality)) \(bestValue) <")
                     }
                     
                     index += 1
@@ -156,7 +155,6 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
                         bestCountTrueNegatives = countTrueNegatives
                         bestCountFalsePositives = countFalsePositives
                         bestCountFalseNegatives = countFalseNegatives
-                        print("lte e(\(_quality)) \(bestValue) <=")
                     }
                     
                     index += 1
@@ -190,7 +188,6 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
                         bestCountTrueNegatives = countTrueNegatives
                         bestCountFalsePositives = countFalsePositives
                         bestCountFalseNegatives = countFalseNegatives
-                        print("eee e(\(_quality)) \(bestValue) ==")
                     }
                     
                     index += 1
@@ -226,7 +223,6 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
                         bestCountTrueNegatives = countTrueNegatives
                         bestCountFalsePositives = countFalsePositives
                         bestCountFalseNegatives = countFalseNegatives
-                        print("gte e(\(_quality)) \(bestValue) >=")
                     }
                     
                     index -= 1
@@ -262,7 +258,6 @@ class DataSplitter<Type: Comparable & Hashable & Defaultable> {
                         bestCountTrueNegatives = countTrueNegatives
                         bestCountFalsePositives = countFalsePositives
                         bestCountFalseNegatives = countFalseNegatives
-                        print("gt e(\(_quality)) \(bestValue) >")
                     }
                     
                     index -= 1

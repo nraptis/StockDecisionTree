@@ -11,13 +11,14 @@ actor ViewModel: ObservableObject {
     
     private(set) var stockDataLabeled = StockDataLabeled()
     private var decisionTree = StockDecisionTree()
+    private var randomForest = StockRandomForest()
     
     init() {
         stockDataLabeled.load()
         
         print("loaded: \(stockDataLabeled.nodes.count) nodes...")
         
-        var nodes = stockDataLabeled.nodes.shuffled()
+        let nodes = stockDataLabeled.nodes.shuffled()
         
         var training = [LabeledNode]()
         var testing = [LabeledNode]()
@@ -41,7 +42,10 @@ actor ViewModel: ObservableObject {
         print("\(training.count) training nodes \(testing.count) testing nodes")
         
         decisionTree.train(nodes: training)
-        decisionTree.test(nodes: training)
+        decisionTree.test(nodes: testing)
+        
+        randomForest.train(nodes: training)
+        randomForest.test(nodes: testing)
         
         
     }

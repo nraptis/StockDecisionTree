@@ -202,168 +202,11 @@ class StockDecisionTree {
         
         root = bestSplit(nodes: nodes)
         if let root = root {
-            print("keep-a-goin, lol")
-            
-            print("crit: \(root.criteria)")
-            print("comp: \(root.comparison)")
-            print("val: \(root.value)")
-            
-            
-            let sspp = executeSplit(decisionNode: root, nodes: nodes)
-            print("left: \(sspp.left.count)")
-            print("right: \(sspp.right.count)")
-            
-            print("=== lef:")
-            for node in sspp.left {
-                print("val: \(node.change1)")
-            }
-            print("=== righ:")
-            for node in sspp.right {
-                print("val: \(node.change1)")
-            }
-            
             build(decisionNode: root,
                   nodes: nodes,
                   depth: 1,
                   maxDepth: maxDepth)
         }
-        
-        printTree()
-        
-        /*
-        let intSplitter = BestSplitterInt<LabeledNode>()
-        
-        for node in nodes {
-            intSplitter.add(value: node.streakDown, outcome: outcome(node: node))
-        }
-        
-        if let split = intSplitter.solve(comparisons: [.lessThan, .lessThanEqual, .equal, .greaterThanEqual, .greaterThan]) {
-            print("Best Split: \(split.value), \(split.comparison)")
-        }
-        */
-        
-        
-        /*
-        let chimpSplitter = DataSplitter<Int>()
-        
-        for node in nodes {
-            chimpSplitter.add(value: node.daysSincePreviousClose, outcome: outcome(node: node))
-        }
-        
-        //
-        if let split = chimpSplitter.solve(comparisons: [.lessThanEqual, .lessThan, .equal, .greaterThan, .greaterThanEqual]) {
-            print("Best Split: \(split.value), \(split.comparison)")
-            print("TP: \(split.truePositives), TN: \(split.trueNegatives), FP: \(split.falsePositives), FN: \(split.falseNegatives)")
-            print("Quality: \(split.quality)")
-        }
-        */
-        
-        /*
-        struct CriteriaResult {
-            let criteria: Criteria
-            let split: DataSplitter.Split
-        }
-        */
-        
-        /*
-        for criteria in Criteria.allCases {
-            let type = criteria.type
-            switch type {
-            case .float:
-                let splitter = DataSplitter<Float>()
-                for node in nodes {
-                    let float = valueFloat(criteria: criteria, node: node)
-                    splitter.add(value: float, outcome: outcome(node: node))
-                }
-                if let result = splitter.solve(comparisons: type.comparisons) {
-                    print("F result for \(criteria):")
-                    print("F Best Split: \(result.value), \(result.comparison)")
-                    print("F TP: \(result.truePositives), TN: \(result.trueNegatives), FP: \(result.falsePositives), FN: \(result.falseNegatives)")
-                    print("F Quality: \(result.quality)")
-                }
-            case .int:
-                let splitter = DataSplitter<Int>()
-                for node in nodes {
-                    let int = valueInt(criteria: criteria, node: node)
-                    splitter.add(value: int, outcome: outcome(node: node))
-                }
-                if let result = splitter.solve(comparisons: type.comparisons) {
-                    print("I result for \(criteria):")
-                    print("I Best Split: \(result.value), \(result.comparison)")
-                    print("I TP: \(result.truePositives), TN: \(result.trueNegatives), FP: \(result.falsePositives), FN: \(result.falseNegatives)")
-                    print("I Quality: \(result.quality)")
-                }
-            case .bool:
-                let splitter = DataSplitter<Bool>()
-                for node in nodes {
-                    let bool = valueBool(criteria: criteria, node: node)
-                    splitter.add(value: bool, outcome: outcome(node: node))
-                }
-                if let result = splitter.solve(comparisons: type.comparisons) {
-                    print("B result for \(criteria):")
-                    print("B Best Split: \(result.value), \(result.comparison)")
-                    print("B TP: \(result.truePositives), TN: \(result.trueNegatives), FP: \(result.falsePositives), FN: \(result.falseNegatives)")
-                    print("B Quality: \(result.quality)")
-                }
-            }
-        }
-        */
-        
-        /*
-        // For testing purpose... we will evaluate the best possible split just for "change1 > x"
-        var minVal = nodes[0].change1
-        var maxVal = nodes[0].change1
-        for node in nodes {
-            minVal = min(minVal, node.change1)
-            maxVal = max(maxVal, node.change1)
-        }
-        
-        print("searching in range [\(minVal) to \(maxVal)]")
-        
-        var bestAccurateClassificationCount = 0
-        var bestSplit = Float(0.0)
-        var bestPercent = Float(0.0)
-        
-        var steps = 100
-        for iteration in 0..<steps {
-            let percent = Float(iteration) / Float(steps - 1)
-            let split = minVal + (maxVal - minVal) * percent
-            print("split[\(iteration)] on \(split)")
-            
-            var segmentLeft = [LabeledNode]()
-            var segmentRight = [LabeledNode]()
-            
-            for node in nodes {
-                if node.change1 > split {
-                    segmentRight.append(node)
-                } else {
-                    segmentLeft.append(node)
-                }
-            }
-            
-            var numberClassifiedCorrectly = 0
-            for node in segmentLeft {
-                if !outcome(node: node) {
-                    numberClassifiedCorrectly += 1
-                }
-            }
-            for node in segmentRight {
-                if outcome(node: node) {
-                    numberClassifiedCorrectly += 1
-                }
-            }
-            print("numberClassifiedCorrectly = \(numberClassifiedCorrectly)")
-            if numberClassifiedCorrectly > bestAccurateClassificationCount {
-                bestAccurateClassificationCount = numberClassifiedCorrectly
-                bestSplit = split
-                
-                bestPercent = Float(numberClassifiedCorrectly) / Float(nodes.count)
-            }
-        }
-        print("Best Split: \(bestSplit)")
-        print("Best Count: \(bestAccurateClassificationCount)")
-        print("Best Percent: \(bestPercent)")
-        */
     }
     
     func build(decisionNode: DecisionNode, nodes: [LabeledNode], depth: Int, maxDepth: Int) {
@@ -388,7 +231,7 @@ class StockDecisionTree {
                   depth: depth + 1,
                   maxDepth: maxDepth)
         } else {
-            print("True \(decisionNode) depth: \(depth), terminate")
+            //print("True \(decisionNode) depth: \(depth), terminate")
         }
         
         if let split = bestSplit(nodes: nodesFalse) {
@@ -398,7 +241,7 @@ class StockDecisionTree {
                   depth: depth + 1,
                   maxDepth: maxDepth)
         } else {
-            print("False \(decisionNode) depth: \(depth), terminate")
+            //print("False \(decisionNode) depth: \(depth), terminate")
         }
         
         
@@ -696,10 +539,10 @@ class StockDecisionTree {
                                              criteria: criteria,
                                              comparison: split.comparison)
                     }
-                    print("Split Result [Float]: \(split.value), \(split.comparison)")
-                    print("(True +): \(split.truePositives), (True -): \(split.trueNegatives)")
-                    print("(False +): \(split.falsePositives), (False -): \(split.falseNegatives)")
-                    print("Quality: \(split.quality)")
+                    //print("Split Result [Float]: \(split.value), \(split.comparison)")
+                    //print("(True +): \(split.truePositives), (True -): \(split.trueNegatives)")
+                    //print("(False +): \(split.falsePositives), (False -): \(split.falseNegatives)")
+                    //print("Quality: \(split.quality)")
                 }
             case .int:
                 let splitter = DataSplitter<Int>()
@@ -715,10 +558,10 @@ class StockDecisionTree {
                                              criteria: criteria,
                                              comparison: split.comparison)
                     }
-                    print("Split Result [Int]: \(split.value), \(split.comparison)")
-                    print("(True +): \(split.truePositives), (True -): \(split.trueNegatives)")
-                    print("(False +): \(split.falsePositives), (False -): \(split.falseNegatives)")
-                    print("Quality: \(split.quality)")
+                    //print("Split Result [Int]: \(split.value), \(split.comparison)")
+                    //print("(True +): \(split.truePositives), (True -): \(split.trueNegatives)")
+                    //print("(False +): \(split.falsePositives), (False -): \(split.falseNegatives)")
+                    //print("Quality: \(split.quality)")
                 }
             case .bool:
                 let splitter = DataSplitter<Bool>()
@@ -733,10 +576,10 @@ class StockDecisionTree {
                                       criteria: criteria,
                                       comparison: split.comparison)
                     }
-                    print("Split Result [Bool]: \(split.value), \(split.comparison)")
-                    print("(True +): \(split.truePositives), (True -): \(split.trueNegatives)")
-                    print("(False +): \(split.falsePositives), (False -): \(split.falseNegatives)")
-                    print("Quality: \(split.quality)")
+                    //print("Split Result [Bool]: \(split.value), \(split.comparison)")
+                    //print("(True +): \(split.truePositives), (True -): \(split.trueNegatives)")
+                    //print("(False +): \(split.falsePositives), (False -): \(split.falseNegatives)")
+                    //print("Quality: \(split.quality)")
                 }
             }
         }
