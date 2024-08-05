@@ -173,6 +173,13 @@ struct StockDataLabeled {
         var count1W = 0
         var sum1W = Float(0.0)
         
+        var minimumWeek = Float(0.0)
+        var minimumMonth = Float(0.0)
+        
+        var maximumWeek = Float(0.0)
+        var maximumMonth = Float(0.0)
+        
+        
         while index < stockDataRaw.nodes.count {
             
             let today = stockDataRaw.nodes[index]
@@ -197,6 +204,13 @@ struct StockDataLabeled {
                         oneWeek = delta
                         count1W += 1
                         sum1W += delta
+                        
+                        if oneWeek < minimumWeek {
+                            minimumWeek = oneWeek
+                        }
+                        if oneWeek > maximumWeek {
+                            maximumWeek = oneWeek
+                        }
                     }
                     
                     var oneMonth = Float(0.0)
@@ -207,6 +221,13 @@ struct StockDataLabeled {
                         oneMonth = delta
                         count1M += 1
                         sum1M += delta
+                        
+                        if oneMonth < minimumWeek {
+                            minimumMonth = oneMonth
+                        }
+                        if oneMonth > maximumMonth {
+                            maximumMonth = oneMonth
+                        }
                     }
                     
                     
@@ -225,7 +246,11 @@ struct StockDataLabeled {
         print("On Average, Changes by \(averageOneWeek)% in 5 business days")
         print("On Average, Changes by \(averageOneMonth)% in 25 business days")
         
+        print("On Worst, Changes by \(minimumWeek)% in 5 business days")
+        print("On Worst, Changes by \(minimumMonth)% in 25 business days")
         
+        print("On Best, Changes by \(maximumWeek)% in 5 business days")
+        print("On Best, Changes by \(maximumMonth)% in 25 business days")
         
     }
 }
