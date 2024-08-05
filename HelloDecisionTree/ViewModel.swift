@@ -16,7 +16,9 @@ actor ViewModel: ObservableObject {
     init() {
         stockDataLabeled.load()
         
-        print("loaded: \(stockDataLabeled.nodes.count) nodes...")
+        stockDataLabeled.measureOneMonthAfterCrash()
+        
+        return;
         
         let nodes = stockDataLabeled.nodes.shuffled()
         

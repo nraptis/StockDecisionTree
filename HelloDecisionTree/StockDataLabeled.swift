@@ -154,4 +154,78 @@ struct StockDataLabeled {
         nodes.removeAll(keepingCapacity: true)
         
     }
+    
+    func measureOneMonthAfterCrash() {
+        
+        var stockDataRaw = StockDataRaw()
+        stockDataRaw.load(fileName: "nasdaq_historical", fileExtension: "csv")
+        
+        let lengthOfCrash = 7
+        let severityOfCrash = Float(-7.5)
+        
+        var index = lengthOfCrash
+        
+        var visited = stockDataRaw.nodes.map { _ in false }
+        
+        var count1M = 0
+        var sum1M = Float(0.0)
+        
+        var count1W = 0
+        var sum1W = Float(0.0)
+        
+        while index < stockDataRaw.nodes.count {
+            
+            let today = stockDataRaw.nodes[index]
+            var nDaysBack = stockDataRaw.nodes[index - lengthOfCrash]
+            if visited[index - lengthOfCrash] == false {
+                
+                let dip = percentChange(start: nDaysBack.close,
+                                        end: today.close)
+                if dip <= severityOfCrash {
+                    
+                    var paint = index - lengthOfCrash
+                    while paint <= index {
+                        visited[paint] = true
+                        paint += 1
+                    }
+                    
+                    var oneWeek = Float(0.0)
+                    if index + 5 < stockDataRaw.nodes.count {
+                        var nDaysForward = stockDataRaw.nodes[index + 5]
+                        let delta = percentChange(start: today.close,
+                                                  end: nDaysForward.close)
+                        oneWeek = delta
+                        count1W += 1
+                        sum1W += delta
+                    }
+                    
+                    var oneMonth = Float(0.0)
+                    if index + 25 < stockDataRaw.nodes.count {
+                        var nDaysForward = stockDataRaw.nodes[index + 25]
+                        let delta = percentChange(start: today.close,
+                                                  end: nDaysForward.close)
+                        oneMonth = delta
+                        count1M += 1
+                        sum1M += delta
+                    }
+                    
+                    
+                    print("from \(nDaysBack.dateString) to \(today.dateString), a crash of \(dip), in 1 week \(oneWeek) change, in 1 month \(oneMonth) change")
+                    
+                }
+                
+                
+            }
+            index += 1
+        }
+        
+        let averageOneWeek = sum1W / Float(count1W)
+        let averageOneMonth = sum1M / Float(count1M)
+
+        print("On Average, Changes by \(averageOneWeek)% in 5 business days")
+        print("On Average, Changes by \(averageOneMonth)% in 25 business days")
+        
+        
+        
+    }
 }

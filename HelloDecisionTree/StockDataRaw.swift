@@ -14,10 +14,18 @@ struct StockDataRaw {
         let dateYear: Int
         let dateMonth: Int
         let dateDay: Int
+        
+        let close: Float
+        let volume: Int
+        
         let open: Float
         let high: Float
         let low: Float
-        let close: Float
+        
+        var dateString: String {
+            return "y:\(dateYear) m:\(dateMonth) d:\(dateDay)"
+        }
+        
         var description: String {
             let openString = String(format: "%.2f", open)
             let highString = String(format: "%.2f", high)
@@ -45,34 +53,40 @@ struct StockDataRaw {
         }
     }
     
+    func getInt(string: String) -> Int? {
+        let result = string.trimmingCharacters(in: CharacterSet(charactersIn: "0123456789").inverted)
+        return Int(result)
+    }
+    
+    func getFloat(string: String) -> Float? {
+        let result = string.trimmingCharacters(in: CharacterSet(charactersIn: "0123456789.").inverted)
+        return Float(result)
+    }
+    
+    func splitManually(dataString: String) -> [String] {
+        var result = [String]()
+        let array = Array(dataString)
+        var partial = [Character]()
+        
+        for character in array {
+            if character == "\n" || character == "\r" {
+                
+            }
+            
+        }
+        
+        
+        
+        return result
+    }
+    
     mutating private func load(dataString: String) {
         clear()
 
-        let linesNL = dataString.split(separator: "\n")
-            .map {
-                $0
-                    .trimmingCharacters(in: .whitespacesAndNewlines)
-            }.filter {
-                $0
-                    .count > 0
-            }
-        
-        var lines = [String]()
-        for line in linesNL {
-            let linesCR = line.split(separator: "\r")
-                .map {
-                    $0
-                        .trimmingCharacters(in: .whitespacesAndNewlines)
-                }.filter {
-                    $0
-                        .count > 0
-                }
-            for innerLine in linesCR {
-                lines.append(innerLine)
-            }
-        }
+        let lines = dataString.split(whereSeparator: \.isNewline)
         
         for line in lines {
+            
             let lineChunks = line.split(separator: ",")
                 .map {
                     $0
@@ -86,27 +100,32 @@ struct StockDataRaw {
             let dateChunks = lineChunks[0].split(separator: "/")
             guard dateChunks.count > 2 else { continue }
             
-            guard let dateMonth = Int(dateChunks[0]) else { continue }
-            guard let dateDay = Int(dateChunks[1]) else { continue }
-            guard var dateYear = Int(dateChunks[2]) else { continue }
-            dateYear += 2000
+            guard let dateMonth = getInt(string: String(dateChunks[0])) else { continue }
+            guard let dateDay = getInt(string: String(dateChunks[1])) else { continue }
+            guard var dateYear = getInt(string: String(dateChunks[2])) else { continue }
             
             let dateComponents = DateComponents(calendar: .current, year: dateYear, month: dateMonth, day: dateDay)
             guard let date = Calendar.current.date(from: dateComponents) else { continue }
             
-            guard let open = Float(lineChunks[1]) else { continue }
-            guard let high = Float(lineChunks[2]) else { continue }
-            guard let low = Float(lineChunks[3]) else { continue }
-            guard let close = Float(lineChunks[4]) else { continue }
-
+            
+            guard let close = getFloat(string: lineChunks[1]) else { continue }
+            
+            guard let volume = getInt(string: lineChunks[2]) else { continue }
+            
+            guard let open = getFloat(string: lineChunks[3]) else { continue }
+            guard let high = getFloat(string: lineChunks[4]) else { continue }
+            guard let low = getFloat(string: lineChunks[5]) else { continue }
+            
             let node = StockDataRawNode(date: date,
                                         dateYear: dateYear,
                                         dateMonth: dateMonth,
                                         dateDay: dateDay,
+                                        close: close,
+                                        volume: volume,
                                         open: open,
                                         high: high,
-                                        low: low,
-                                        close: close)
+                                        low: low)
+            
             nodes.append(node)
         }
         nodes.reverse()
